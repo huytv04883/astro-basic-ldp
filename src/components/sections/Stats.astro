@@ -1,0 +1,74 @@
+---
+const stats = [
+  { icon: 'members', value: '2,245,341', label: 'Members' },
+  { icon: 'clubs', value: '46,328', label: 'Clubs' },
+  { icon: 'events', value: '828,867', label: 'Event Bookings' },
+  { icon: 'payments', value: '1,926,436', label: 'Payments' },
+];
+---
+
+<section class="stats-section py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-center gap-12 md:gap-20">
+      <!-- Left text -->
+      <div class="md:w-80 text-center md:text-left">
+        <h2 class="text-3xl font-bold text-dark leading-snug">
+          Helping a local<br />
+          <span class="text-primary">business reinvent itself</span>
+        </h2>
+        <p class="text-sm text-gray mt-3">We reached here with our hard work and dedication</p>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="flex-1 grid md:grid-cols-2 gap-8">
+        {stats.map((stat) => (
+          <div class="stat-item flex items-center gap-4">
+            <div class="stat-icon w-12 h-12 flex items-center justify-center rounded-full bg-primary-tint flex-shrink-0">
+              {stat.icon === 'members' && (
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                  <circle cx="9" cy="9" r="4" fill="#4CAF50"/>
+                  <circle cx="17" cy="9" r="4" fill="#81C784"/>
+                  <path d="M1 22c0-5 3.5-8 8-8s8 3 8 8" stroke="#4CAF50" stroke-width="2" fill="none"/>
+                  <path d="M16 22c0-3 2-6 5-7" stroke="#81C784" stroke-width="2" fill="none"/>
+                </svg>
+              )}
+              {stat.icon === 'clubs' && (
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                  <path d="M4 22V10l9-7 9 7v12" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" strokel-inejoin="round"/>
+                  <rect x="10" y="15" width="6" height="7" rx="1" fill="#4CAF50"/>
+                </svg>
+              )}
+              {stat.icon === 'events' && (
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                  <rect x="3" y="5" width="20" height="18" rx="3" stroke="#4CAF50" stroke-width="2" fill="none"/>
+                  <path d="M8 3v4M18 3v4" stroke="#4CAF50" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M3 11h20" stroke="#4CAF50" stroke-width="2"/>
+                  <circle cx="9" cy="16" r="1.5" fill="#4CAF50"/>
+                  <circle cx="13" cy="16" r="1.5" fill="#4CAF50"/>
+                  <circle cx="17" cy="16" r="1.5" fill="#4CAF50"/>
+                </svg>
+              )}
+              {stat.icon === 'payments' && (
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                  <rect x="2" y="6" width="22" height="14" rx="3" stroke="#4CAF50" stroke-width="2" fill="none"/>
+                  <path d="M2 11h22" stroke="#4CAF50" stroke-width="2"/>
+                  <rect x="5" y="15" width="6" height="2" rx="1" fill="#4CAF50"/>
+                </svg>
+              )}
+            </div>
+            <div>
+              <div class="text-2xl font-bold text-dark">{stat.value}</div>
+              <div class="text-sm text-gray">{stat.label}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stats-section {
+    background-color: #F5F5F5;
+  }
+</style>

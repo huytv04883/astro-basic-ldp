@@ -1,0 +1,89 @@
+---
+const tags = ['Safeguarding', 'Membership', 'Triathlon'];
+
+interface ApiPost { id: number; title: string; }
+
+const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=3');
+const data: ApiPost[] = await res.json();
+
+const posts = data.map((post, i) => ({
+  id: post.id,
+  tag: tags[i],
+  title: post.title,
+}));
+---
+
+<section class="blog-section py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-dark mb-3">Caring is the new marketing</h2>
+      <p class="text-sm text-gray max-w-xl mx-auto">
+        The Nexcent blog is the best place to read about the latest membership insights,
+        trends and more. See who's joining the community, read about how our community
+        are increasing their membership income and lots more.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {posts.map((post, i) => (
+        <article class="blog-card rounded-xl overflow-hidden border border-gray-pale hover:shadow-lg transition-shadow group">
+          <!-- Image placeholder -->
+          <div class="blog-img h-48 relative overflow-hidden">
+            {i === 0 && (
+              <svg viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full object-cover">
+                <rect width="400" height="200" fill="#E8F5E9"/>
+                <rect x="0" y="0" width="400" height="200" fill="url(#g1)"/>
+                <defs><linearGradient id="g1" x1="0" y1="0" x2="400" y2="200" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#C8E6C9"/>
+                  <stop offset="1" stop-color="#A5D6A7"/>
+                </linearGradient></defs>
+                <circle cx="200" cy="80" r="50" fill="#81C784" opacity="0.5"/>
+                <path d="M160 120 Q200 60 240 120" fill="#4CAF50" opacity="0.7"/>
+                <path d="M140 140 Q200 100 260 140" fill="#388E3C" opacity="0.5"/>
+                <rect x="80" y="130" width="240" height="70" fill="#2E7D32" opacity="0.3"/>
+              </svg>
+            )}
+            {i === 1 && (
+              <svg viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full object-cover">
+                <rect width="400" height="200" fill="#ECEFF1"/>
+                <rect x="60" y="20" width="280" height="160" rx="12" fill="#CFD8DC"/>
+                <circle cx="200" cy="80" r="40" fill="#B0BEC5"/>
+                <rect x="100" y="130" width="200" height="8" rx="4" fill="#90A4AE"/>
+                <rect x="120" y="148" width="160" height="6" rx="3" fill="#B0BEC5"/>
+                <circle cx="60" cy="160" r="20" fill="#A5D6A7" opacity="0.6"/>
+              </svg>
+            )}
+            {i === 2 && (
+              <svg viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full object-cover">
+                <rect width="400" height="200" fill="#FFF9C4"/>
+                <rect x="0" y="0" width="400" height="200" fill="url(#g3)"/>
+                <defs><linearGradient id="g3" x1="0" y1="0" x2="400" y2="200" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#FFF9C4"/>
+                  <stop offset="1" stop-color="#F9A825" stop-opacity="0.3"/>
+                </linearGradient></defs>
+                <rect x="80" y="30" width="240" height="140" rx="10" fill="#FFF8E1"/>
+                <rect x="100" y="50" width="200" height="8" rx="4" fill="#F9A825" opacity="0.7"/>
+                <rect x="100" y="70" width="160" height="5" rx="3" fill="#BDBDBD"/>
+                <rect x="100" y="84" width="180" height="5" rx="3" fill="#BDBDBD"/>
+                <rect x="100" y="100" width="60" height="24" rx="6" fill="#4CAF50"/>
+              </svg>
+            )}
+          </div>
+          <!-- Content -->
+          <div class="p-5 bg-white">
+            <span class="text-xs font-medium text-primary bg-primary-tint px-2 py-1 rounded-full">{post.tag}</span>
+            <h3 class="text-sm font-bold text-dark mt-3 mb-4 leading-snug group-hover:text-primary transition-colors">
+              {post.title}
+            </h3>
+            <a href={`/posts/${post.id}`} class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+              Readmore
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

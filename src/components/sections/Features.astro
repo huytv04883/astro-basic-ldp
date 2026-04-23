@@ -1,0 +1,79 @@
+---
+const cards = [
+  {
+    icon: 'membership',
+    title: 'Membership Organisations',
+    desc: 'Our membership management software provides full automation of membership renewals and payments',
+  },
+  {
+    icon: 'national',
+    title: 'National Associations',
+    desc: 'Our membership management software provides full automation of membership renewals and payments',
+  },
+  {
+    icon: 'clubs',
+    title: 'Clubs And Groups',
+    desc: 'Our membership management software provides full automation of membership renewals and payments',
+  },
+];
+---
+
+<section id="feature" class="features-section py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl font-bold text-dark mb-3">
+        Manage your entire community<br class="hidden md:block" /> in a single system
+      </h2>
+      <p class="text-sm text-gray">Who is Nextcent suitable for?</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {cards.map((card) => (
+        <div class="feature-card text-center p-8 rounded-xl border border-gray-pale hover:shadow-lg transition-shadow">
+          <div class="feature-icon w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-primary-tint">
+            {card.icon === 'membership' && (
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="5" fill="#4CAF50"/>
+                <circle cx="24" cy="12" r="5" fill="#81C784"/>
+                <path d="M2 30c0-6 4.5-10 10-10s10 4 10 10" stroke="#4CAF50" stroke-width="2.5" fill="none"/>
+                <path d="M22 30c0-4 2.5-8 6-9" stroke="#81C784" stroke-width="2.5" fill="none"/>
+              </svg>
+            )}
+            {card.icon === 'national' && (
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="18" width="10" height="14" rx="2" fill="#81C784"/>
+                <rect x="13" y="10" width="10" height="22" rx="2" fill="#4CAF50"/>
+                <rect x="22" y="14" width="10" height="18" rx="2" fill="#66BB6A"/>
+                <path d="M2 32h32" stroke="#263238" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            )}
+            {card.icon === 'clubs' && (
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="10" r="5" fill="#4CAF50"/>
+                <circle cx="8" cy="20" r="4" fill="#81C784"/>
+                <circle cx="28" cy="20" r="4" fill="#81C784"/>
+                <path d="M10 32c0-4 3.5-7 8-7s8 3 8 7" stroke="#4CAF50" stroke-width="2.5" fill="none"/>
+                <path d="M2 32c0-3 2-5 6-6" stroke="#81C784" stroke-width="2" fill="none"/>
+                <path d="M34 32c0-3-2-5-6-6" stroke="#81C784" stroke-width="2" fill="none"/>
+              </svg>
+            )}
+          </div>
+          <h3 class="text-lg font-bold text-dark mb-3">{card.title}</h3>
+          <p class="text-sm text-gray leading-relaxed">{card.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .feature-card:hover .feature-icon {
+    background-color: #4CAF50;
+  }
+  .feature-card:hover .feature-icon svg path,
+  .feature-card:hover .feature-icon svg circle,
+  .feature-card:hover .feature-icon svg rect {
+    fill: white;
+    stroke: white;
+  }
+</style>
