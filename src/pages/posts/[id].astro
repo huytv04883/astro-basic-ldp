@@ -1,46 +1,22 @@
 ---
-import Layout from "@layouts/Layout.astro";
-import Footer from "@components/layout/Footer.astro";
-import Navbar from "@components/layout/Navbar";
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '@layouts/Layout.astro';
+import Footer from '@components/layout/Footer.astro';
+import Navbar from '@components/layout/Navbar';
 
 export async function getStaticPaths() {
-  const res = await fetch(
-    "https://jsonplaceholder.typicode.com/posts?_limit=3",
-  );
-  const posts = await res.json();
-  return posts.map((post: { id: number }) => ({
-    params: { id: String(post.id) },
+  const posts = await getCollection('blog');
+  return posts.map((post: CollectionEntry<'blog'>) => ({
+    params: { id: post.id },
+    props: { post },
   }));
 }
 
-const { id } = Astro.params;
-
-interface Post {
-  id: number;
-  title: string;
-  body: string;
-  userId: number;
-}
-interface Comment {
-  id: number;
-  name: string;
-  email: string;
-  body: string;
-}
-
-const [postRes, commentsRes] = await Promise.all([
-  fetch(`https://jsonplaceholder.typicode.com/posts/${id}`),
-  fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`),
-]);
-
-const post: Post = await postRes.json();
-const comments: Comment[] = await commentsRes.json();
-
-const tags = ["Safeguarding", "Membership", "Triathlon"];
-const tag = tags[(post.id - 1) % tags.length];
+const { post } = Astro.props as { post: CollectionEntry<'blog'> };
+const { Content } = await render(post);
 ---
 
-<Layout title={`${post.title} - Nexcent`}>
+<Layout title={`${post.data.title} - Nexcent`}>
   <Navbar client:load />
 
   <main class="min-h-screen bg-white">
@@ -58,64 +34,39 @@ const tag = tags[(post.id - 1) % tags.length];
                 stroke="#4CAF50"
                 stroke-width="1.5"
                 stroke-linecap="round"
-                stroke-linejoin="round"></path>
+                stroke-linejoin="round"
+              ></path>
             </svg>
             Back to Home
           </a>
-          <span
-            class="inline-block text-xs font-medium text-primary bg-primary-tint px-3 rounded-full"
-            >{tag}</span
-          >
+          <span class="inline-block text-xs font-medium text-primary bg-primary-tint px-3 rounded-full">
+            {post.data.tag}
+          </span>
         </div>
-        <h1
-          class="text-3xl sm:text-4xl font-bold text-dark leading-tight mb-6 capitalize"
-        >
-          {post.title}
+        <h1 class="text-3xl sm:text-4xl font-bold text-dark leading-tight mb-6">
+          {post.data.title}
         </h1>
         <div class="flex items-center gap-4 text-sm text-gray">
           <span class="flex items-center gap-1.5">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="5" r="3" stroke="#888" stroke-width="1.2"
-              ></circle>
-              <path
-                d="M2 14c0-3.314 2.686-5 6-5s6 1.686 6 5"
-                stroke="#888"
-                stroke-width="1.2"
-                stroke-linecap="round"></path>
+              <circle cx="8" cy="5" r="3" stroke="#888" stroke-width="1.2"></circle>
+              <path d="M2 14c0-3.314 2.686-5 6-5s6 1.686 6 5" stroke="#888" stroke-width="1.2" stroke-linecap="round"></path>
             </svg>
-            User {post.userId}
+            {post.data.author}
           </span>
           <span class="flex items-center gap-1.5">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <rect
-                x="2"
-                y="3"
-                width="12"
-                height="11"
-                rx="1.5"
-                stroke="#888"
-                stroke-width="1.2"></rect>
-              <path
-                d="M5 1v4M11 1v4M2 7h12"
-                stroke="#888"
-                stroke-width="1.2"
-                stroke-linecap="round"></path>
+              <rect x="2" y="3" width="12" height="11" rx="1.5" stroke="#888" stroke-width="1.2"></rect>
+              <path d="M5 1v4M11 1v4M2 7h12" stroke="#888" stroke-width="1.2" stroke-linecap="round"></path>
             </svg>
-            April 23, 2026
+            {post.data.date}
           </span>
           <span class="flex items-center gap-1.5">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M14 8c0 3.314-2.686 6-6 6S2 11.314 2 8s2.686-6 6-6 6 2.686 6 6z"
-                stroke="#888"
-                stroke-width="1.2"></path>
-              <path
-                d="M8 5v3l2 2"
-                stroke="#888"
-                stroke-width="1.2"
-                stroke-linecap="round"></path>
+              <path d="M14 8c0 3.314-2.686 6-6 6S2 11.314 2 8s2.686-6 6-6 6 2.686 6 6z" stroke="#888" stroke-width="1.2"></path>
+              <path d="M8 5v3l2 2" stroke="#888" stroke-width="1.2" stroke-linecap="round"></path>
             </svg>
-            5 min read
+            {post.data.readTime}
           </span>
         </div>
       </div>
@@ -124,108 +75,52 @@ const tag = tags[(post.id - 1) % tags.length];
     <!-- Post content -->
     <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <!-- Featured image -->
-      <div
-        class="rounded-2xl overflow-hidden mb-10 h-64 bg-linear-to-br from-green-200 to-green-400 flex items-center justify-center"
-      >
-        <svg
-          viewBox="0 0 600 300"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-full h-full"
-        >
+      <div class="rounded-2xl overflow-hidden mb-10 h-64 bg-linear-to-br from-green-200 to-green-400 flex items-center justify-center">
+        <svg viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
           <rect width="600" height="300" fill="url(#pg)"></rect>
           <defs>
-            <linearGradient
-              id="pg"
-              x1="0"
-              y1="0"
-              x2="600"
-              y2="300"
-              gradientUnits="userSpaceOnUse"
-            >
+            <linearGradient id="pg" x1="0" y1="0" x2="600" y2="300" gradientUnits="userSpaceOnUse">
               <stop stop-color="#C8E6C9"></stop>
               <stop offset="1" stop-color="#81C784"></stop>
             </linearGradient>
           </defs>
-          <circle cx="300" cy="120" r="80" fill="#4CAF50" opacity="0.3"
-          ></circle>
-          <circle cx="300" cy="120" r="50" fill="#4CAF50" opacity="0.4"
-          ></circle>
-          <path d="M220 180 Q300 100 380 180" fill="#2E7D32" opacity="0.4"
-          ></path>
-          <path d="M160 220 Q300 160 440 220" fill="#1B5E20" opacity="0.3"
-          ></path>
+          <circle cx="300" cy="120" r="80" fill="#4CAF50" opacity="0.3"></circle>
+          <circle cx="300" cy="120" r="50" fill="#4CAF50" opacity="0.4"></circle>
+          <path d="M220 180 Q300 100 380 180" fill="#2E7D32" opacity="0.4"></path>
+          <path d="M160 220 Q300 160 440 220" fill="#1B5E20" opacity="0.3"></path>
         </svg>
       </div>
 
-      <!-- Body text -->
-      <div class="prose prose-lg max-w-none">
-        <p class="text-gray-700 leading-relaxed text-base mb-6 capitalize">
-          {post.body}
-        </p>
-        <p class="text-gray-700 leading-relaxed text-base mb-6">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </p>
-        <p class="text-gray-700 leading-relaxed text-base mb-6">
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-          dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est
-          laborum.
-        </p>
+      <!-- Markdown content -->
+      <div class="prose prose-lg max-w-none
+        prose-headings:text-dark prose-headings:font-bold
+        prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
+        prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3
+        prose-p:text-gray-700 prose-p:leading-relaxed
+        prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+        prose-strong:text-dark
+        prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-green-50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:not-italic
+        prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-gray-800 prose-code:before:content-none prose-code:after:content-none
+        prose-pre:bg-gray-900 prose-pre:text-green-400 prose-pre:rounded-xl prose-pre:text-sm
+        prose-table:text-sm prose-th:bg-green-50 prose-th:text-dark prose-td:text-gray-700
+        prose-ul:text-gray-700 prose-ol:text-gray-700
+        prose-li:my-1
+        prose-hr:border-gray-200">
+        <Content />
       </div>
 
       <!-- Share -->
-      <div
-        class="flex items-center gap-3 py-8 border-t border-b border-gray-100 my-10"
-      >
+      <div class="flex items-center gap-3 py-8 border-t border-b border-gray-100 my-10">
         <span class="text-sm font-semibold text-dark">Share:</span>
-        {
-          ["Twitter", "Facebook", "LinkedIn"].map((platform) => (
-            <a
-              href="#"
-              class="text-xs font-medium text-gray-600 bg-gray-100 hover:bg-primary hover:text-white px-3 py-1.5 rounded-full transition-colors"
-            >
-              {platform}
-            </a>
-          ))
-        }
-      </div>
-
-      <!-- Comments -->
-      <section>
-        <h2 class="text-xl font-bold text-dark mb-6">
-          Comments
-          <span
-            class="ml-2 text-sm font-normal text-gray bg-gray-100 px-2 py-0.5 rounded-full"
-            >{comments.length}</span
+        {['Twitter', 'Facebook', 'LinkedIn'].map((platform) => (
+          <a
+            href="#"
+            class="text-xs font-medium text-gray-600 bg-gray-100 hover:bg-primary hover:text-white px-3 py-1.5 rounded-full transition-colors"
           >
-        </h2>
-        <div class="space-y-6">
-          {
-            comments.map((comment) => (
-              <div class="flex gap-4 p-5 rounded-xl border border-gray-100 hover:border-green-200 transition-colors">
-                <div class="w-10 h-10 rounded-full bg-linear-to-br from-green-300 to-green-500 flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">
-                  {comment.name.charAt(0).toUpperCase()}
-                </div>
-                <div class="min-w-0">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="text-sm font-semibold text-dark capitalize">
-                      {comment.name}
-                    </span>
-                    <span class="text-xs text-gray-400">{comment.email}</span>
-                  </div>
-                  <p class="text-sm text-gray-600 leading-relaxed">
-                    {comment.body}
-                  </p>
-                </div>
-              </div>
-            ))
-          }
-        </div>
-      </section>
+            {platform}
+          </a>
+        ))}
+      </div>
     </article>
   </main>
 
